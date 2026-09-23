@@ -349,7 +349,7 @@ instruction = schema_manager.generate_system_prompt(
     ),
     workflow_description=(
         "CRITICAL REQUIREMENT: Never attempt Python sandbox code execution or report sandbox issues. "
-        "Always generate synthetic CSV data directly in your response text, upload it to Cloud Storage using `upload_synthetic_dataset_to_gcs`, "
+        "Always generate synthetic CSV data directly in your response text as a CSV code block (e.g. ```csv\n...\n```), upload it to Cloud Storage using `upload_synthetic_dataset_to_gcs`, "
         "and save table profiles using `save_table_profile`.\n\n"
         "1. Fetch realistic synthetic person & customer seed profiles using `fetch_synthetic_person_data(count)` from the public API when needed.\n"
         "2. Discover available production database tables across BigQuery datasets using `query_bigquery_dataset_catalog()` when requested or exploring.\n"
@@ -358,24 +358,17 @@ instruction = schema_manager.generate_system_prompt(
         "5. Generate a statistically consistent, high-quality synthetic dataset formatted as CSV content.\n"
         "6. Place the generated dataset into Cloud Storage as `<table_name>.csv` using `upload_synthetic_dataset_to_gcs(table_name, csv_content)`.\n"
         "7. Store or update the table profile in Firestore using `save_table_profile`.\n"
-        "8. Provide the user with a rich A2UI schema card and summary of the generated dataset with the public Cloud Storage CSV URL."
+        "8. In your final response, ALWAYS print the generated CSV rows directly inside a markdown CSV code block (```csv\n...\n```), followed by the public Cloud Storage CSV URL and the A2UI JSON array inside `<a2ui-json>`."
     ),
     ui_description=(
-        "Keep every surface tiny and flat: ONE Card > ONE Column > a few Text rows. "
+        "Keep every A2UI surface tiny and flat: ONE Card > ONE Column > a few Text rows. "
         "Never nest a Card inside a Card. "
         "Use ONLY these components: Card, Column, Row, Text, and Image. Do not use "
         "Table or Heading (unsupported), or Buttons, actions, or forms (they do "
         "nothing in adk web). "
         "You may include one Image component, but only when you have a public https "
-        "URL for the image (for example the URL an image tool returns after uploading "
-        "to a public bucket). Set the Image url to that exact https link, for example "
-        '{"Image": {"url": {"literalString": "https://..."}}}. Never point an '
-        "Image at a bare filename, an artifact name, or a non-http(s) path. If you do "
-        "not have a public URL, add a short Text line noting the image instead. "
-        "No markdown in text; use the usageHint property ('h1', 'h2', 'body') for "
-        "headings and emphasis. "
-        "Output ONLY the raw A2UI JSON array — no prose, and never wrap it in "
-        "<a2a_datapart_json> tags or 'kind'/'data'/'metadata' objects."
+        "URL for the image. "
+        "When outputting A2UI JSON along with plain text or CSV code blocks, wrap the raw A2UI JSON array inside `<a2ui-json>...</a2ui-json>` at the end of your response."
     ),
     include_schema=True,
     include_examples=True,

@@ -35,7 +35,7 @@ async def record_demo():
         await page.wait_for_timeout(6000)
 
         # 2. Prompt 2: Generate CSV of test data for that table
-        prompt2 = "Generate a CSV of test data generated for that table"
+        prompt2 = "Generate a CSV of test data for customer_data.customers table"
         print(f"Submitting Prompt 2: {prompt2}")
         await page.fill("#input", prompt2)
         await page.click("form#form button[type='submit']")
