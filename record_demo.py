@@ -23,7 +23,7 @@ async def record_demo():
         await page.wait_for_timeout(3000)
 
         # 1. Prompt 1: Ask what's in customer table in BigQuery
-        prompt1 = "What's in customer_data.customers table in BigQuery?"
+        prompt1 = "What's in customer table in BigQuery?"
         print(f"Submitting Prompt 1: {prompt1}")
         await page.fill("#input", prompt1)
         await page.click("form#form button[type='submit']")
@@ -35,7 +35,7 @@ async def record_demo():
         await page.wait_for_timeout(6000)
 
         # 2. Prompt 2: Generate CSV of test data for that table
-        prompt2 = "Generate a CSV of test data generated for that table and upload it to Cloud Storage"
+        prompt2 = "Generate a CSV of test data generated for that table"
         print(f"Submitting Prompt 2: {prompt2}")
         await page.fill("#input", prompt2)
         await page.click("form#form button[type='submit']")
