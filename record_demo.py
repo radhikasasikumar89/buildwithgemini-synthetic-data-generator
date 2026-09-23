@@ -29,16 +29,22 @@ async def record_demo():
         await page.click("form#form button[type='submit']")
         
         print("Waiting for agent response to Prompt 1...")
-        await page.wait_for_timeout(25000)
+        # Wait until 2nd agent message is present and not "…"
+        await page.wait_for_function('document.querySelectorAll(".msg.agent").length >= 2 && !document.querySelectorAll(".msg.agent")[1].textContent.includes("…")', timeout=60000)
+        await page.evaluate('document.getElementById("log").scrollTop = document.getElementById("log").scrollHeight')
+        await page.wait_for_timeout(6000)
 
-        # 2. Prompt 2: Richer prompt showing schema inspection, tool call, and generating test file in GCS
+        # 2. Prompt 2: Rich prompt showing schema inspection, tool call, and generating test file in GCS
         prompt2 = "Check the schema for novasmart_pricing.wholesale_costs table, profile its columns, and generate a synthetic CSV test dataset uploaded to Cloud Storage"
         print(f"Submitting Prompt 2: {prompt2}")
         await page.fill("#input", prompt2)
         await page.click("form#form button[type='submit']")
 
         print("Waiting for agent response to Prompt 2...")
-        await page.wait_for_timeout(25000)
+        # Wait until 3rd agent message is present and not "…"
+        await page.wait_for_function('document.querySelectorAll(".msg.agent").length >= 3 && !document.querySelectorAll(".msg.agent")[2].textContent.includes("…")', timeout=60000)
+        await page.evaluate('document.getElementById("log").scrollTop = document.getElementById("log").scrollHeight')
+        await page.wait_for_timeout(8000)
 
         # Save video path
         video_page = page.video
