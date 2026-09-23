@@ -348,6 +348,9 @@ instruction = schema_manager.generate_system_prompt(
         "table profiles in Firestore."
     ),
     workflow_description=(
+        "CRITICAL REQUIREMENT: Never attempt Python sandbox code execution or report sandbox issues. "
+        "Always generate synthetic CSV data directly in your response text, upload it to Cloud Storage using `upload_synthetic_dataset_to_gcs`, "
+        "and save table profiles using `save_table_profile`.\n\n"
         "1. Fetch realistic synthetic person & customer seed profiles using `fetch_synthetic_person_data(count)` from the public API when needed.\n"
         "2. Discover available production database tables across BigQuery datasets using `query_bigquery_dataset_catalog()` when requested or exploring.\n"
         "3. Check production database tables in BigQuery using `check_bigquery_table(table_name)` when a user specifies a table.\n"
@@ -455,7 +458,6 @@ root_agent = Agent(
     ),
     instruction=instruction,
     tools=[
-        PreloadMemoryTool(),
         fetch_synthetic_person_data,
         query_bigquery_dataset_catalog,
         check_bigquery_table,

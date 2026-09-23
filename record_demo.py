@@ -22,8 +22,8 @@ async def record_demo():
         await page.goto("http://localhost:8080", wait_until="networkidle")
         await page.wait_for_timeout(3000)
 
-        # 1. Prompt 1: Primary app capability (BigQuery table profiling & CSV generation)
-        prompt1 = "Profile novasmart_pricing.inventory table and generate 30 synthetic rows as CSV"
+        # 1. Prompt 1: Ask what's in customer table in BigQuery
+        prompt1 = "What's in customer_data.customers table in BigQuery?"
         print(f"Submitting Prompt 1: {prompt1}")
         await page.fill("#input", prompt1)
         await page.click("form#form button[type='submit']")
@@ -34,8 +34,8 @@ async def record_demo():
         await page.evaluate('document.getElementById("log").scrollTop = document.getElementById("log").scrollHeight')
         await page.wait_for_timeout(6000)
 
-        # 2. Prompt 2: Rich prompt showing schema inspection, tool call, and generating test file in GCS
-        prompt2 = "Check the schema for novasmart_pricing.wholesale_costs table, profile its columns, and generate a synthetic CSV test dataset uploaded to Cloud Storage"
+        # 2. Prompt 2: Generate CSV of test data for that table
+        prompt2 = "Generate a CSV of test data generated for that table and upload it to Cloud Storage"
         print(f"Submitting Prompt 2: {prompt2}")
         await page.fill("#input", prompt2)
         await page.click("form#form button[type='submit']")
