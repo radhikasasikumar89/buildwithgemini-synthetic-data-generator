@@ -348,15 +348,14 @@ instruction = schema_manager.generate_system_prompt(
         "table profiles in Firestore."
     ),
     workflow_description=(
-        "1. Fetch realistic synthetic person & customer seed profiles using `fetch_synthetic_person_data(count)` from the public API.\n"
+        "1. Fetch realistic synthetic person & customer seed profiles using `fetch_synthetic_person_data(count)` from the public API when needed.\n"
         "2. Discover available production database tables across BigQuery datasets using `query_bigquery_dataset_catalog()` when requested or exploring.\n"
         "3. Check production database tables in BigQuery using `check_bigquery_table(table_name)` when a user specifies a table.\n"
         "4. Analyze the BigQuery schema, data types, constraints, and statistical distributions of sample rows.\n"
-        "5. Execute Python code in the sandbox using `execute_python_in_sandbox(code)` to calculate distributions, compute sample statistics, or generate random synthetic arrays when needed.\n"
-        "6. Generate a statistically consistent, high-quality synthetic dataset formatted as CSV content.\n"
-        "7. Place the generated dataset into Cloud Storage as `<table_name>.csv` using `upload_synthetic_dataset_to_gcs(table_name, csv_content)`.\n"
-        "8. Store or update the table profile in Firestore using `save_table_profile`.\n"
-        "9. Provide the user with a summary of the generated dataset, schema details, and the public Cloud Storage CSV URL."
+        "5. Generate a statistically consistent, high-quality synthetic dataset formatted as CSV content.\n"
+        "6. Place the generated dataset into Cloud Storage as `<table_name>.csv` using `upload_synthetic_dataset_to_gcs(table_name, csv_content)`.\n"
+        "7. Store or update the table profile in Firestore using `save_table_profile`.\n"
+        "8. Provide the user with a rich A2UI schema card and summary of the generated dataset with the public Cloud Storage CSV URL."
     ),
     ui_description=(
         "Keep every surface tiny and flat: ONE Card > ONE Column > a few Text rows. "
@@ -454,11 +453,9 @@ root_agent = Agent(
         model="gemini-2.5-flash",
         retry_options=types.HttpRetryOptions(attempts=3),
     ),
-    code_executor=sandbox_executor,
     instruction=instruction,
     tools=[
         PreloadMemoryTool(),
-        execute_python_in_sandbox,
         fetch_synthetic_person_data,
         query_bigquery_dataset_catalog,
         check_bigquery_table,
