@@ -250,7 +250,11 @@ def a2ui_callback(
                 )
             )
 
-        new_parts = [_wrap_a2ui_part(m) for m in messages]
+        new_parts = []
+        prose_text = re.sub(r"<a2ui-json>.*?</a2ui-json>", "", text, flags=re.DOTALL).strip()
+        if prose_text:
+            new_parts.append(types.Part(text=prose_text))
+        new_parts.extend([_wrap_a2ui_part(m) for m in messages])
         return LlmResponse(
             content=types.Content(role="model", parts=new_parts),
             custom_metadata={"a2a:response": "true"},

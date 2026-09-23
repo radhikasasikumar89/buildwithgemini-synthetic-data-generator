@@ -462,7 +462,6 @@ root_agent = Agent(
         get_current_time,
     ],
     after_model_callback=a2ui_callback,
-    after_agent_callback=generate_memories_callback,
 )
 
 app = App(
